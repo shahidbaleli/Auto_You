@@ -1,0 +1,51 @@
+name: YouTube Shorts Automation
+
+on:
+  schedule:
+    - cron: "44 8 * * *"
+    - cron: "47 16 * * *"
+  workflow_dispatch:
+
+jobs:
+  generate-and-upload:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg imagemagick fonts-dejavu-core
+
+      - name: Configure ImageMagick policy (allow text rendering)
+        run: |
+          if [ -f /etc/ImageMagick-6/policy.xml ]; then
+            sudo sed -i 's/rights="none" pattern="@\*"/rights="read" pattern="@*"/' /etc/ImageMagick-6/policy.xml
+          fi
+
+      - name: Install Python dependencies
+        run: |
+          pip install -r requirements.txt
+
+      - name: Run automation pipeline
+        env:
+          PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
+          YT_REFRESH_TOKEN: ${{ secrets.YT_REFRESH_TOKEN }}
+          YT_CLIENT_ID: ${{ secrets.YT_CLIENT_ID }}
+          YT_CLIENT_SECRET: ${{ secrets.YT_CLIENT_SECRET }}
+        run: |
+          python main.py
+
+      - name: Commit updated script queue
+        run: |
+          git config user.name "yt-shorts-bot"
+          git config user.email "bot@localhost"
+          git add scripts/scripts.json
+          git diff --staged --quiet || git commit -m "Mark script as used [skip ci]"
+          git push

@@ -1,0 +1,607 @@
+═══════════════════════════════════════════════════════════════
+  COMPLETE SETUP GUIDE — YouTube Shorts Automation System
+  From unzipping to your first Short (As simple as a 10 year old can do this)
+═══════════════════════════════════════════════════════════════
+ Note: We recomend to upload this "SETUP-GUIDE" file to any AI (Gemini , chatgpt)
+       so that, on any problem it can guide you properly through all the process
+       especially for non technical users.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  BEFORE YOU START — What you need ready
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+You need 2 free accounts:
+
+  1. GitHub Account (github.com) — to host the code and run the automation
+  2. Pexels API Key (pexels.com/api) — free, for downloading video clips
+
+No AI API keys needed. No YouTube API quota issues.
+Refresh tokens last forever — set up once, forget about it.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  STEP 1 — Unzip the project
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  a. Right-click the ZIP file and select "Extract All"
+  b. Choose any folder on your computer (e.g., Desktop/yt-shorts)
+  c. Click "Extract"
+
+  After extraction, you will see this structure:
+    main.py
+    auth_setup.py            ← run this ONCE to get YouTube tokens
+    requirements.txt
+    SETUP-GUIDE.txt          ← you are reading this
+    README.md
+    scripts/
+      scripts.json           ← you will put AI-generated scripts here
+    src/
+      __init__.py
+      reader.py              ← reads scripts.json
+      audio.py
+      downloader.py
+      editor.py
+      uploader.py            ← YouTube Data API v3 (OAuth)
+    .github/
+      workflows/
+        schedule.yml
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  STEP 2 — Upload to GitHub
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  a. Go to github.com and log in
+  b. Click the green "New" button (or go to github.com/new)
+  c. Give your repository a name, e.g., "yt-shorts-automation"
+  d. Keep it "Public" (or "Private" — doesn't matter)
+  e. Do NOT check any boxes. Click "Create repository"
+
+  Option A — Drag & drop (easiest):
+    1. On the GitHub repo page, click "Add file" → "Upload files"
+    2. Drag the entire project folder from your computer into the
+       browser window
+    3. Scroll down, add a commit message like "Initial commit"
+    4. Click "Commit changes"
+
+  Option B — Command line:
+    1. Open the project folder on your computer
+    2. Right-click inside the folder → "Open in Terminal"
+    3. Run these commands one by one:
+         git init
+         git add .
+         git commit -m "Initial commit"
+         git branch -M main
+         git remote add origin https://github.com/YOUR_USERNAME/yt-shorts-automation.git
+         git push -u origin main
+       (Replace YOUR_USERNAME with your actual GitHub username)
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  STEP 3 — Generate scripts using any AI (free)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  This system does NOT need an API key for AI. Instead, you use
+  any free AI (ChatGPT, Google Gemini, Claude, etc.) to generate
+  scripts, then save them into the scripts.json file.
+
+  ─── 3A. Copy this prompt ───
+
+  Open ChatGPT (chatgpt.com) or Google Gemini (gemini.google.com)
+  and paste the following prompt. Change the category to match
+  your channel topic:
+
+  ┌─────────────────────────────────────────────────────────────┐
+  │ You are a YouTube Shorts script writer. Generate 10 scripts │
+  │ for [category: pychology facts].                    │
+  │                                                            │
+  │ Return ONLY a JSON array — no markdown, no explanation.    │
+  │ Each object must follow exactly this structure:             │
+  │                                                            │
+  │ {                                                           │
+  │   "title": "Catchy title under 100 chars",                 │
+  │   "description": "Description with relevant hashtags",     │
+  │   "tags": ["tag1", "tag2", "tag3"],                        │
+  │   "voiceover_script": "Script under 150 words (~50 sec)",  │
+  │   "visual_keywords": ["kw1", "kw2", "kw3", "kw4", "kw5"]  │
+  │ }                                                           │
+  │                                                            │
+  │ Rules:                                                     │
+  │ - Each script must be on a different subtopic              │
+  │ - Titles must be clickbaity but accurate                   │
+  │ - voiceover_script: hook in first 3 seconds, conversational│
+  │ - visual_keywords: specific searchable Pexels terms        │
+  │ - tags: 3-5 relevant YouTube SEO tags                      │
+  │ - description: include hashtags and call-to-action         │
+  └─────────────────────────────────────────────────────────────┘
+    Note:You can change the number of scripts in the abov prompt. We recomend maximum of 30 scripts per batch for the best reults. 
+  ─── 3B. Change the category ───
+
+  Replace "Pyschology facts" with your channel's topic:
+    • "astrology facts"
+    • "documentary history"
+    • "fitness tips"
+    • "cooking hacks"
+    • "motivational quotes"
+    ...anything you want
+
+  ─── 3C. Save the output ───
+
+  a. After the AI responds, copy the JSON output
+  b. Open the file:  scripts/scripts.json (from the extracted folder)
+  c. Delete its contents (the placeholder entry)
+  d. Paste the AI's JSON output
+  e. Save the file
+
+  ─── 3D. Upload scripts.json to GitHub ───
+
+    a. Go to your GitHub repo
+    b. Click into the "scripts" folder
+    c. Click "Add file" → "Upload files"
+    d. Upload the updated scripts.json
+    e. Commit to main branch
+
+  ─── 3E. Adding a second batch if you want  ───
+                         If you want to add some more batches of scripts, or when all 10 scripts are used, you'll generate 10 (or 30) more from the
+    AI. You need to MERGE them into the existing scripts.json file --> Read, COMMON MISTAKES TO AVOID (What NOT to do) --> Entry 10 below.
+    
+
+
+
+  ─── 3E. Pexels API Key ───
+
+  a. Go to https://www.pexels.com/api/
+  b. Click "Join Free" or "Sign Up"
+  c. After signing up, go to "Your API" tab
+  d. Copy your API key
+  e. Save it somewhere safe
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  STEP 4 — Get YouTube OAuth Tokens (one-time, lasts forever)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  This system uses YouTube's
+  official API with OAuth refresh tokens. These tokens last
+  FOREVER — you do this once and never again.
+
+  You need 3 things: Client ID, Client Secret, Refresh Token.
+
+  ─── 4A. Create a Google Cloud Project ───
+
+    a. Go to https://console.cloud.google.com/
+    b. Click the project dropdown at the top → "New Project"
+    c. Name it anything (e.g., "yt-shorts-uploader")
+    d. Click "Create"
+
+  ─── 4B. Enable the YouTube Data API v3 ───
+
+    a. Go to https://console.cloud.google.com/apis/library/youtube.googleapis.com
+       (make sure your new project is selected at the top)
+    b. Click "Enable"
+
+  ─── 4C. Create OAuth 2.0 Credentials ───
+
+    a. Go to https://console.cloud.google.com/apis/credentials
+    b. Click "Create Credentials" → "OAuth client ID"
+     c. If it asks you to configure consent screen:
+        - Choose "External" → "Create"
+        - App name: "YT Shorts Upload" (or anything)
+        - User support email: your email
+        - Developer contact: your email
+        - Click "Save and Continue" through all screens
+        - No need to add scopes
+        - On the "Test users" screen, click "Add Users"
+        - Enter your own Google email address (the same one
+          you use for YouTube) — this is CRITICAL. Without
+          this, you'll get a 403 error when signing in.
+        - Click "Save and Continue" → "Back to Dashboard"
+     d. Back on the credentials page:
+       - Application type: "Desktop app"
+       - Name: "yt-shorts-script"
+       - Click "Create"
+    e. A popup shows your Client ID and Client Secret.
+       Copy both and save them temporarily.
+
+  ─── 4D. Run auth_setup.py on your computer ───
+
+    This is the ONLY step that uses your local computer.
+    It installs ~5 MB of Python packages and opens a browser
+    for you to sign in to Google.
+
+    a. Open a terminal/command prompt on your computer
+    b. Navigate to the project folder:
+         cd path/to/yt-shorts-folder
+    c. Install the auth helper (one-time, ~5 MB):
+         pip install google-auth-oauthlib google-auth
+    d. Run the script:
+         python auth_setup.py
+    e. When prompted, paste your Client ID and press Enter
+    f. Paste your Client Secret and press Enter
+    g. A browser window will open asking you to sign in
+       to Google. Sign in with your YouTube channel's Google
+       account.
+    h. Click "Continue" (it will say "Google hasn't verified
+       this app" — this is normal for self-use, click continue)
+    i. Click "Allow" to grant YouTube upload permissions
+    j. Close the browser tab when it says "Authentication
+       successful! You may close this tab."
+
+    k. Go back to the terminal. You will see:
+         =======================================================
+         SUCCESS! Add these 3 values to GitHub Secrets from terminal:
+         =======================================================
+         YT_REFRESH_TOKEN: 1//0g...
+         YT_CLIENT_ID: 123456789-abc.apps.googleusercontent.com
+         YT_CLIENT_SECRET: G0C...
+         =======================================================
+
+    l. Keep this terminal open — you need these 3 values
+       for the next step.
+
+  ─── 4E. Add secrets to GitHub ───
+
+    a. Go to your GitHub repository page
+    b. Click "Settings" tab → "Secrets and variables" → "Actions"
+    c. Click "New repository secret"
+
+    Add these 3 secrets (one at a time):
+
+    Secret 1:
+      Name:    YT_REFRESH_TOKEN
+      Secret:  Paste the long token from step 4D (starts with 1//0g...)
+
+    Secret 2:
+      Name:    YT_CLIENT_ID
+      Secret:  Paste your Client ID
+
+    Secret 3:
+      Name:    YT_CLIENT_SECRET
+      Secret:  Paste your Client Secret
+
+    Secret 4:
+      Name:    PEXELS_API_KEY
+      Secret:  Paste your Pexels API key from Step 3E
+
+  That's it! You never need to do this again. These tokens
+  work forever until you manually revoke them.
+
+  ─── Important notes about OAuth tokens ───
+
+    • ✓ Refresh tokens last forever (years) — no expiry
+    • ✓ No browser/cookies needed in GitHub Actions
+    • ✓ Uses official YouTube Data API — never breaks
+    • ✓ Only 2 API calls per video — well under free quota
+    • ✓ No Playwright — faster runs, less memory
+    • If you ever need to revoke access, go to:
+      https://myaccount.google.com/permissions
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  STEP 5 — Run the workflow manually (first test)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Before waiting for the scheduled time, let's test everything.
+
+  ─── First: Check if your workflow file exists ───
+
+    a. Go to your repository's main page
+    b. Look for ".github" folder → click it → "workflows" folder
+    c. Do you see "schedule.yml" there?
+         YES → Go ahead
+         NO  → Follow the fix below
+
+  ─── If the workflow file is missing ───
+
+    ❌ WRONG: Clicking into folders first
+    ✅ CORRECT: Stay on MAIN page → "Add file" → "Create new file"
+       → Type exactly: .github/workflows/schedule.yml
+       → Paste the contents from your local file → then press "Commit"
+
+ ____ Note: DON'T forget to set "Read and write permissions" in GitHub
+      Settings → Actions → General → Workflow permissions →
+       "Read and write permissions". Without this, the git push
+       step fails and scripts.json never gets marked as used.
+
+  ─── When you see the workflow ───
+
+    a. Go to your repo → "Actions" tab
+    b. Click "YouTube Shorts Automation" in the left sidebar
+    c. Click "Run workflow" dropdown → green "Run workflow" button
+    d. Wait and watch the live logs
+
+  ─── What happens during the workflow ───
+
+    1. GitHub sets up a Ubuntu Linux computer in the cloud
+    2. Installs ffmpeg, ImageMagick, and fonts
+    3. Installs Python and required libraries
+    4. Reads the next unused script from scripts/scripts.json
+    5. Uses edge-tts to create voiceover
+    6. Downloads video clips from Pexels
+    7. Stitches everything together with MoviePy
+    8. Gets a fresh access token from your refresh token
+    9. Uploads directly to YouTube via the official API
+   10. Marks the script as "used" and pushes back to GitHub
+   11. Cleans up all temporary files
+
+  ─── If successful ───
+
+    • "Uploaded! Video ID: yyyyyyy" and "https://youtu.be/yyyyyyyy"
+    • Go to your YouTube channel to see the uploaded Short
+
+  ─── If it fails ───
+
+    • Read the error in the logs
+    • See "TROUBLESHOOTING" section below. (OR ask any an AI about the error, provided with this GUIDE )
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  STEP 6 — Automatic scheduling (sit back and relax)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  After a successful manual run, the system automatically:
+
+    • Runs at 8:44 AM UTC every day
+    • Runs at 4:47 PM UTC every day
+
+  That's 2 Shorts per day, automatically.
+
+  When all scripts are used, the pipeline prints:
+    "All N scripts used. Generate fresh ones."
+  and stops cleanly — no error.
+
+  To change the schedule, edit .github/workflows/schedule.yml
+  and update the cron lines.
+--> Note: sometime GitHub Actions cron schedules do not run exactly on the minute
+          due to overload. Sometime it delays upto 2 hours. To bypass the heavy 
+          server traffic on GitHub, never schedule your cron on a flat hour (like :00).
+          Shift your minutes to a random, odd number (like :17, :34, or :41). Fewer
+          people use these numbers, so your workflow will clear the queue much faster.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  COMMON MISTAKES TO AVOID (What NOT to do)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ── Workflow / GitHub Mistakes ──
+
+  1. DON'T create the workflow file at the wrong path
+     → Type .github/workflows/schedule.yml in ONE filename box.
+       Do NOT click into folders first. Stay on the MAIN repo page.
+
+  2. DON'T name the folder "github" instead of ".github"
+     → The dot at the start is required. GitHub Actions ignores
+       the folder without it.
+
+  3. DON'T forget to set "Read and write permissions" in GitHub
+     → Settings → Actions → General → Workflow permissions →
+       "Read and write permissions". Without this, the git push
+       step fails and scripts.json never gets marked as used.
+
+  4. DON'T upload files inside a subfolder
+     → When dragging your project to GitHub via "Upload files",
+       drag the CONTENTS of the folder (main.py, src/, etc.),
+       NOT the folder itself. Files must be at the root level.
+
+
+  ── OAuth / YouTube Mistakes ──
+
+  5. DON'T skip adding yourself as a test user in OAuth consent
+     → After creating the consent screen, go to "Test users"
+       and add your own email. Otherwise you get Error 403.
+
+  6. DON'T share your refresh token, client ID, or client secret
+     → Keep them in GitHub Secrets. Never paste them in code.
+
+  7. DON'T use the AIza... or AQ... API key format
+     → Those are for Google AI Studio (Gemini API), not for
+       YouTube. This system doesn't need any Gemini API key.
+
+  ── scripts.json Mistakes ──
+
+  8. DON'T put scripts as a single object {} instead of array []
+      → MUST be a JSON array: [ {...}, {...}, ... ]
+
+  9. DON'T change the JSON field names in scripts.json
+      → Must match exactly: title, description, tags,
+        voiceover_script, visual_keywords, used.
+
+  10. DON'T forget to REMOVE "]" and ADD "," when merging batches
+      → Follow the merge instructions below.
+    
+
+    Step 1: Open your existing scripts/scripts.json from GitHub
+            The end of the file looks like:
+              },
+              {
+                ...last script...
+              }
+            ]
+
+    Step 2: REMOVE the closing bracket "]" at the very end.
+            Now the file ends with the last script's } and nothing after.
+
+    Step 3: ADD a comma "," after the last script's closing }
+            It should now look like this at the end:
+              }
+            ]
+              ↓ Remove ]
+              ↓ Add ,
+            },
+            
+
+    Step 4: Open the NEW batch from the AI. It starts with:
+            [
+              {
+                ...first new script...
+              }
+
+    Step 5: REMOVE the opening bracket "[" from the new batch.
+            Now it starts directly with {
+              {
+                ...first new script...
+              }
+
+    Step 6: Paste the new batch (without the [) directly AFTER the
+            comma you added in Step 3. The result:
+
+            },
+            {
+              ...first new script of batch 2...
+            },
+            {
+              ...second new script...
+            }
+            ]
+
+    Step 7: Add the closing bracket "]" at the very end.
+
+    Step 8: Save and upload to GitHub.
+
+    ─── Example of the merge ───
+
+    Existing file (end part):
+      {
+        "id": 10,
+        "title": "Last script of batch 1",
+        ...
+        "used": true
+      }
+    ]
+
+    Step 1: Remove ]
+    Step 2: Add comma after }
+      {
+        "id": 10,
+        ...
+        "used": true
+      },
+    Step 3: Take new batch, remove its opening [
+    Step 4: Paste after the comma:
+      {
+        "id": 10,
+        ...
+        "used": true
+      },
+      {
+        "id": 11,
+        "title": "First script of batch 2",
+        ...
+        "used": false
+      },
+      ...
+      {
+        "id": 20,
+        ...
+        "used": false
+      }
+    ]
+    Step 5: Add ] at the end
+
+    Done. The file now has 20 scripts (10 used + 10 unused)
+
+  11. DON'T leave placeholder content in scripts.json
+      → Delete the example entry and paste your real AI output
+
+  ── Video / Pexels Mistakes ──
+
+
+  12. DON'T change the video resolution or codec settings
+      → 1080×1920 at 30fps with h.264 is what YouTube Shorts
+        expects. Changing these causes upload failures.
+
+  ── General Mistakes ──
+
+  13. DON'T run this locally on Windows — it will probably fail
+      → Designed for GitHub's Ubuntu runners. ImageMagick paths
+        and ffmpeg are different on Windows. Use WSL if needed.
+
+  14. DON'T modify the workflow YAML file without a proper editor
+      → YAML is sensitive to spaces vs tabs. Use VS Code,
+        Notepad++, etc. Not regular Notepad.
+
+  15. DON'T worry about the "Node.js 20 is deprecated" warning
+      → It's just a warning, not an error. Completely harmless.
+
+  16. DON'T run out of GitHub Actions free minutes
+      → Free accounts get 2000-3000 min/month. Each run is
+        ~ less the 10 min. At 2/day you use ~600 min/month. Fine.
+        But don't manually trigger too many extra runs.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  TROUBLESHOOTING
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  Problem = Error 
+
+  Problem:  "Missing required environment variables"
+  Fix:      You didn't add all secrets to GitHub. Run
+            auth_setup.py again and add YT_REFRESH_TOKEN,
+            YT_CLIENT_ID,  YT_CLIENT_SECRET , PEXELS_API_KEY .
+
+  Problem:  "invalid_grant" or "Token has been revoked"
+  Fix:      Your refresh token was revoked. Run auth_setup.py
+            again to get a new one.
+
+  Problem:  "quotaExceeded" or "dailyLimitExceeded"
+  Fix:      YouTube API free quota is 10,000 units/day.
+            Each upload uses ~1,600 units. At 2/day you
+            use 3,200 — well under limit. Wait until reset
+            (midnight Pacific) or check your usage at
+            console.cloud.google.com/apis/api/youtube.googleapis.com/quotas
+
+  Problem:  "PEXELS_API_KEY environment variable not set"
+  Fix:      Add PEXELS_API_KEY in GitHub Settings → Secrets
+
+  Problem:  "No usable video clips to compose"
+  Fix:      Pexels keywords returned no results. Broaden them
+            in your scripts.json
+
+  Problem:  "All X scripts used. Generate fresh ones."
+  Fix:      Generate 10 new scripts using the prompt in Step 3
+
+  Problem:  Video has no subtitles
+  Fix:      ImageMagick policy issue. Check the workflow logs
+            for the "Configure ImageMagick policy" step
+
+  Problem:  "No such file or directory: 'scripts/scripts.json'"
+  Fix:      The scripts/ folder wasn't uploaded to GitHub.
+            Create it at the root level.
+
+  Problem:  Node.js 20 is deprecated warning
+  Fix:      Just a warning. Ignore it, it's harmless.
+
+  Problem:  Git push fails in the commit step
+  Fix:      Go to Settings → Actions → General → Workflow
+            permissions → select "Read and write permissions"
+
+  Problem:  Error 403 "access_denied" when running auth_setup.py
+  Fix:      You haven't added yourself as a test user. Go to
+            Google Cloud Console → APIs & Services → OAuth
+            consent screen → "Test users" → "Add Users" →
+            enter your email → Save → Run auth_setup.py again.
+
+  Problem:  "Expecting ',' delimiter" or "Expecting value" JSON error
+  Fix:      Your scripts.json has invalid JSON. Go to
+            jsonlint.com, paste the file contents, and click
+            "Validate JSON". It will show you the exact line
+            with the error. Common causes: missing comma between
+            objects, trailing comma on last item, extra brackets.
+
+  Problem:  "module 'PIL.Image' has no attribute 'ANTIALIAS'"
+  Fix:      Newer Pillow versions removed this constant. The
+            code now includes a fix (ANTIALIAS → LANCZOS).
+            Make sure you have the latest version of editor.py
+            from the repo.
+
+
+  Problem:  "No space left on device"
+  Fix:      GitHub runners have ~14GB. The system auto-cleans.
+
+
+═══════════════════════════════════════════════════════════════
+  That's it! You now have a fully automated YouTube Shorts
+  factory that runs for free, twice a day, forever.
+--->  if you got stuck anywhere, facing a problem, have any query Please contact at  axisai.contact@gmail.com
+      its our pleasure to help you. We are with you through all this setup.      
+═══════════════════════════════════════════════════════════════
