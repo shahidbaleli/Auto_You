@@ -13,7 +13,9 @@
 You need 2 free accounts:
 
   1. GitHub Account (github.com) — to host the code and run the automation
-  2. Pexels API Key (pexels.com/api) — free, for downloading video clips
+  2. Pexels API Key (pexels.com/api) — free, for downloading video clips & images
+
+Background music: commit MP3 files to the bgm/ folder (optional — skip for no music)
 
 No AI API keys needed. No YouTube API quota issues.
 Refresh tokens last forever — set up once, forget about it.
@@ -41,6 +43,7 @@ Refresh tokens last forever — set up once, forget about it.
       audio.py
       downloader.py
       editor.py
+      music.py              ← picks MP3 from bgm/ folder
       uploader.py            ← YouTube Data API v3 (OAuth)
     .github/
       workflows/
@@ -148,13 +151,20 @@ Refresh tokens last forever — set up once, forget about it.
 
 
 
-  ─── 3E. Pexels API Key ───
+  ─── 3E. Pexels API Key (required) ───
 
   a. Go to https://www.pexels.com/api/
   b. Click "Join Free" or "Sign Up"
   c. After signing up, go to "Your API" tab
   d. Copy your API key
   e. Save it somewhere safe
+
+  ─── 3F. Background music (optional) ───
+
+  To add background music, put your MP3 files in the bgm/ folder
+  at the root of the project and commit them. The system picks one
+  based on your script's keywords. If the folder is empty or missing,
+  the video will have voiceover only — no background music.
 
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -317,12 +327,14 @@ Refresh tokens last forever — set up once, forget about it.
     3. Installs Python and required libraries
     4. Reads the next unused script from scripts/scripts.json
     5. Uses edge-tts to create voiceover
-    6. Downloads video clips from Pexels
-    7. Stitches everything together with MoviePy
-    8. Gets a fresh access token from your refresh token
-    9. Uploads directly to YouTube via the official API
-   10. Marks the script as "used" and pushes back to GitHub
-   11. Cleans up all temporary files
+    6. Downloads video clips + images from Pexels
+    7. Picks a background music MP3 from the bgm/ folder (if any)
+    8. Stitches everything together with MoviePy (Ken Burns zoom,
+       animated captions, background music)
+    9. Gets a fresh access token from your refresh token
+   10. Uploads directly to YouTube via the official API
+   11. Marks the script as "used" and pushes back to GitHub
+   12. Cleans up all temporary files
 
   ─── If successful ───
 
