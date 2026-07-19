@@ -11,14 +11,11 @@
 | Feature | v1.x | v2.0 |
 |---|---|---|
 | Video clips per short | 5 | **10 + 8 images** (interleaved) |
-| Background music | None | **Pixabay** (free API key, optional) |
 | Transitions | None | Direct cuts (stable concatenation) |
 | Ken Burns zoom | None | **Slow zoom** (1.0 → 1.08) on all clips & images |
 | Captions | Static sentences at bottom | **MrBeast-style**: dark background box, phrase-by-phrase, fade animation, higher position |
 | Image support | None | **Pexels photos** with Ken Burns zoom |
-| Music API key required | — | Optional — skip for no background music |
-
- --> A quick Note: Sorry guys there is an issue with music , pixabay don't provides music endpoints via api so it would not work. Soon I would update this. I should have check this first.
+| Music   | — | Optional — skip for no background music |
 
 ---
 
@@ -100,7 +97,7 @@ You need 2 free accounts (plus 1 optional):
 |---|---|---|
 | [GitHub](https://github.com) | Yes | Host code + run Actions |
 | [Pexels API](https://www.pexels.com/api/) | Yes | Video clips + images |
-| [Pixabay API](https://pixabay.com/api/) | No | Background music (optional) |
+
 
 Advanced neural voiceovers via Google Gemini API (optional fallback to free edge-tts). No YouTube API quota issues.
 

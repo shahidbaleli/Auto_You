@@ -9,7 +9,7 @@ from src.audio import AudioGenerator
 from src.downloader import VideoDownloader
 from src.editor import VideoEditor
 from src.uploader import YouTubeUploader
-from src.music import MusicDownloader
+from src.sound_designer import SoundDesigner
 
 
 def cleanup(paths: list[str]):

@@ -106,6 +106,7 @@ class VideoEditor:
         audio_duration: float,
         image_paths: list[str] | None = None,
         music_path: str | None = None,
+        sfx_tracks: list[tuple[str, float]] | None = None,
     ) -> str:
         image_paths = image_paths or []
 
@@ -172,10 +173,23 @@ class VideoEditor:
                     bg_music = concatenate_audioclips([bg_music] * n)
                     bg_music = bg_music.subclip(0, audio_duration)
                 bg_music = bg_music.set_duration(audio_duration)
-                bg_music = bg_music.volumex(0.15)
+                bg_music = bg_music.volumex(0.08)  # Duck BGM slightly lower for clear narrator voiceover
                 audio_tracks.append(bg_music)
             except Exception as e:
                 print(f"  Failed to load background music: {e}")
+
+        # Mix sound effects at specified timestamps
+        sfx_tracks = sfx_tracks or []
+        for sfx_path, timestamp in sfx_tracks:
+            try:
+                if os.path.isfile(sfx_path):
+                    sfx_clip = AudioFileClip(sfx_path)
+                    sfx_clip = sfx_clip.set_duration(min(sfx_clip.duration, 5.0))
+                    sfx_clip = sfx_clip.volumex(0.8).set_start(timestamp)
+                    audio_tracks.append(sfx_clip)
+                    print(f"  Mixed sound effect '{os.path.basename(sfx_path)}' at {timestamp:.2f}s")
+            except Exception as e:
+                print(f"  Failed to mix sound effect {sfx_path}: {e}")
 
         final_audio = CompositeAudioClip(audio_tracks)
         final_video = final_video.set_audio(final_audio)
@@ -208,15 +222,14 @@ class VideoEditor:
 
         for c in trimmed:
             c.close()
-        voiceover.close()
-        final_video.close()
-        final.close()
         for t in subtitle_clips:
             t.close()
-        if music_path:
+        for track in audio_tracks:
             try:
-                bg_music.close()
+                track.close()
             except Exception:
                 pass
+        final_video.close()
+        final.close()
 
         return output_path
