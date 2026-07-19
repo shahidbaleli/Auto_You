@@ -542,10 +542,67 @@ Refresh tokens last forever — set up once, forget about it.
   15. DON'T worry about the "Node.js 20 is deprecated" warning
       → It's just a warning, not an error. Completely harmless.
 
+
   16. DON'T run out of GitHub Actions free minutes
       → Free accounts get 2000-3000 min/month. Each run is
         ~ less the 10 min. At 2/day you use ~600 min/month. Fine.
         But don't manually trigger too many extra runs.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  OPTIONAL STEP — Advanced Gemini TTS Voiceovers
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Auto_You supports premium human-like voice narration using Google
+Gemini 3.1 Flash TTS Preview.
+
+If you don't do this step, the system will automatically fall back
+to Microsoft's free edge-tts narrator voice (en-US-AndrewNeural).
+
+  ─── 1. Get a Gemini API Key ───
+  a. Go to Google AI Studio: https://aistudio.google.com/
+  b. Sign in with any Google account.
+  c. Click the "Get API Key" button.
+  d. Click "Create API Key" and copy it.
+
+  ─── 2. Add to GitHub Secrets ───
+  a. Go to your repository on GitHub.
+  b. Go to Settings → Secrets and variables → Actions.
+  c. Click "New repository secret".
+  d. Name: GEMINI_API_KEY
+  e. Value: Paste your Gemini API key.
+  f. Click "Add secret".
+
+  ─── 3. Configure Voices and Models (Optional) ───
+  By default, the system uses the "Aoede" voice and the
+  "gemini-3.1-flash-tts-preview" model.
+  If you want to use a different voice (like "Leda", "Fenrir",
+  "Kore", "Aoede", "Puck", or "Charon"), you can add a Repository
+  Variable in GitHub:
+  a. Go to Settings → Secrets and variables → Actions.
+  b. Click the "Variables" tab next to Secrets.
+  c. Click "New repository variable".
+  d. Name: TTS_VOICE
+  e. Value: Leda (or another supported voice)
+  f. Save it. You can do the same for TTS_MODEL if needed.
+
+  ─── 4. Advanced Script Customization (Optional) ───
+  In your scripts.json file, you can optionally add "audio_profile"
+  and "directors_note" fields to control the tone, accent, pacing,
+  or emotional style of the voice. Example:
+  
+  {
+    "title": "Quantum Levitation",
+    "voiceover_script": "Imagine a world where objects float... [sfx: chime]",
+    "audio_profile": "A deep, resonant narrator of mysteries.",
+    "directors_note": "Style: Vocal Smile. Pace: The Drift. Accent: American.",
+    "visual_keywords": ["quantum", "magnet"],
+    "used": false
+  }
+
+  The system will parse and strip any [sfx: query] tags in your script
+  text, automatically search Openverse CC0 for matching sound effects,
+  and mix them at the exact timestamp!
 
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━

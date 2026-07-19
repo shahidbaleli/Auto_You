@@ -27,9 +27,9 @@
 | Step | Component | Service | Cost |
 |---|---|---|---|
 | Scripts | You provide them | Any AI (ChatGPT, Gemini, Claude) | Free |
-| Voiceover | Microsoft Edge TTS | `edge-tts` (no API key) | Free |
+| Voiceover | Google Gemini TTS / Edge TTS | `google-genai` / `edge-tts` | Free / API Key |
 | Video clips + Images | Pexels API | `requests` → Pexels | Free |
-| Background music | Pixabay API | `requests` → Pixabay | Free (optional key) |
+| BGM & SFX | Openverse CC0 API | `requests` → Openverse | Free (no key) |
 | Video composition | MoviePy 1.0.x | ffmpeg + ImageMagick | Free |
 | Upload | YouTube Data API v3 | OAuth refresh token (official API) | Free (3,200 of 10,000 daily quota) |
 | Scheduling | GitHub Actions | Cron (configurable) | Free (2000+ min/month) |
@@ -41,10 +41,10 @@
 | # | Stage | What happens |
 |---|---|---|
 | 1 | **Read** | `ScriptReader` picks the first unused script from `scripts.json`, marks it used, commits back |
-| 2 | **Audio** | `edge-tts` converts script to MP3 voiceover, returns duration |
+| 2 | **Audio** | `google-genai` generates voiceover using Gemini 3.1 Flash (Aoede voice), falling back to `edge-tts` if keyless |
 | 3 | **Download** | Pexels searched per keyword → up to 10 video clips + 8 images downloaded |
-| 4 | **Music** | Pixabay API (if key set) → background music downloaded |
-| 5 | **Compose** | MoviePy crops to 1080×1920, applies Ken Burns zoom, interleaves images, adds MrBeast-style animated captions, mixes background music at 15% volume, renders with `ultrafast` preset |
+| 4 | **Music** | Openverse CC0 → downloads background music and parses `[sfx: ...]` tags to download sound effects |
+| 5 | **Compose** | MoviePy crops to 1080×1920, applies Ken Burns zoom, interleaves images, adds MrBeast-style animated captions, mixes BGM (ducked at 8%) and SFX, renders with `fast` settings |
 | 6 | **Upload** | Gets fresh access token from refresh token → uploads via YouTube Data API v3 |
 
 When all scripts are used → prints `"All N scripts used. Generate fresh ones."` and exits cleanly.
@@ -102,7 +102,7 @@ You need 2 free accounts (plus 1 optional):
 | [Pexels API](https://www.pexels.com/api/) | Yes | Video clips + images |
 | [Pixabay API](https://pixabay.com/api/) | No | Background music (optional) |
 
-No AI API keys needed. No YouTube API quota issues.
+Advanced neural voiceovers via Google Gemini API (optional fallback to free edge-tts). No YouTube API quota issues.
 
 ### Required GitHub Secrets
 
@@ -112,7 +112,9 @@ No AI API keys needed. No YouTube API quota issues.
 | `YT_REFRESH_TOKEN` | YouTube OAuth refresh token (get via `auth_setup.py`) |
 | `YT_CLIENT_ID` | Google Cloud OAuth client ID |
 | `YT_CLIENT_SECRET` | Google Cloud OAuth client secret |
-| `PIXABAY_API_KEY` | (Optional) Pixabay API key for diverse background music |
+| `GEMINI_API_KEY` | (Optional) Google AI Studio API key for advanced Gemini TTS (Aoede, Leda, etc.) |
+
+*Note: Background music and sound effects (SFX) are searched and downloaded automatically using Openverse CC0 (no API key needed). You can also add custom local music files to the `bgm/` folder as a fallback.*
 
 ---
 
@@ -120,7 +122,7 @@ No AI API keys needed. No YouTube API quota issues.
 
 1. **Google Cloud Console** — create project → enable YouTube Data API v3 → create OAuth 2.0 Desktop credentials → add your email as test user
 2. **Run `auth_setup.py` locally** — paste client ID & secret → sign in to Google → get refresh token
-3. **Add secrets to GitHub** — `PEXELS_API_KEY`, `YT_REFRESH_TOKEN`, `YT_CLIENT_ID`, `YT_CLIENT_SECRET` (and optionally `PIXABAY_API_KEY`)
+3. **Add secrets to GitHub** — `PEXELS_API_KEY`, `YT_REFRESH_TOKEN`, `YT_CLIENT_ID`, `YT_CLIENT_SECRET` (and optionally `GEMINI_API_KEY`)
 4. **Generate scripts** — copy the prompt from `SETUP-GUIDE.txt` → paste into ChatGPT/Gemini → save the JSON output as `scripts/scripts.json`
 5. **Push to GitHub** — commit all files including `scripts/scripts.json`
 6. **Run workflow** — go to Actions tab → "Run workflow" → watch live logs

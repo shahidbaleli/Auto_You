@@ -40,6 +40,9 @@ jobs:
           YT_REFRESH_TOKEN: ${{ secrets.YT_REFRESH_TOKEN }}
           YT_CLIENT_ID: ${{ secrets.YT_CLIENT_ID }}
           YT_CLIENT_SECRET: ${{ secrets.YT_CLIENT_SECRET }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          TTS_VOICE: ${{ vars.TTS_VOICE }}
+          TTS_MODEL: ${{ vars.TTS_MODEL }}
         run: |
           python main.py
 
