@@ -10,12 +10,11 @@
   BEFORE YOU START — What you need ready
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-You need 2 free accounts:
+You need 2 free accounts (plus 1 optional):
 
   1. GitHub Account (github.com) — to host the code and run the automation
   2. Pexels API Key (pexels.com/api) — free, for downloading video clips & images
-
-Background music: commit MP3 files to the bgm/ folder (optional — skip for no music)
+  3. (Optional) Pixabay API Key (pixabay.com/api) — free, for background music
 
 No AI API keys needed. No YouTube API quota issues.
 Refresh tokens last forever — set up once, forget about it.
@@ -43,7 +42,7 @@ Refresh tokens last forever — set up once, forget about it.
       audio.py
       downloader.py
       editor.py
-      music.py              ← picks MP3 from bgm/ folder
+      music.py              ← Pixabay API (optional background music)
       uploader.py            ← YouTube Data API v3 (OAuth)
     .github/
       workflows/
@@ -159,12 +158,16 @@ Refresh tokens last forever — set up once, forget about it.
   d. Copy your API key
   e. Save it somewhere safe
 
-  ─── 3F. Background music (optional) ───
+  ─── 3F. Pixabay API Key (optional — for background music) ───
 
-  To add background music, put your MP3 files in the bgm/ folder
-  at the root of the project and commit them. The system picks one
-  based on your script's keywords. If the folder is empty or missing,
-  the video will have voiceover only — no background music.
+  If you want background music in your Shorts:
+
+  a. Go to https://pixabay.com/api/
+  b. Click "Join Pixabay" or sign up for a free account
+  c. Copy your API key from the API page
+  d. Save it somewhere safe
+
+  If you skip this, your Shorts will still work — just no background music.
 
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -273,6 +276,10 @@ Refresh tokens last forever — set up once, forget about it.
       Name:    PEXELS_API_KEY
       Secret:  Paste your Pexels API key from Step 3E
 
+    Secret 5 (optional — skip if you don't want background music):
+      Name:    PIXABAY_API_KEY
+      Secret:  Paste your Pixabay API key from Step 3F
+
   That's it! You never need to do this again. These tokens
   work forever until you manually revoke them.
 
@@ -328,7 +335,7 @@ Refresh tokens last forever — set up once, forget about it.
     4. Reads the next unused script from scripts/scripts.json
     5. Uses edge-tts to create voiceover
     6. Downloads video clips + images from Pexels
-    7. Picks a background music MP3 from the bgm/ folder (if any)
+    7. Downloads background music from Pixabay (if key set)
     8. Stitches everything together with MoviePy (Ken Burns zoom,
        animated captions, background music)
     9. Gets a fresh access token from your refresh token

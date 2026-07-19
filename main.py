@@ -9,7 +9,7 @@ from src.audio import AudioGenerator
 from src.downloader import VideoDownloader
 from src.editor import VideoEditor
 from src.uploader import YouTubeUploader
-from src.sound_designer import SoundDesigner
+from src.music import MusicDownloader
 
 
 def cleanup(paths: list[str]):
@@ -60,7 +60,13 @@ def main():
         print("\n[2/6] Generating voiceover audio...")
         audio_path = os.path.join(workdir, "voiceover.mp3")
         audio_gen = AudioGenerator()
-        audio_duration = audio_gen.generate(clean_script, audio_path)
+        audio_duration = audio_gen.generate(
+            text=clean_script,
+            output_path=audio_path,
+            title=content.get("title", ""),
+            audio_profile=content.get("audio_profile", "A deep, resonant narrator of mysteries."),
+            directors_note=content.get("directors_note", 'Style: The "Vocal Smile": The soft palate is raised to keep the tone bright, sunny, and explicitly inviting. Pace: The Drift. Accent: American (Valley Girl).')
+        )
         print(f"  Audio duration: {audio_duration:.1f}s")
         temp_files.append(audio_path)
 
